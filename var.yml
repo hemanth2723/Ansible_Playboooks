@@ -1,0 +1,10 @@
+- hosts: web
+  become: yes
+  tasks:
+  - name: running list command
+    shell: hostnae
+    register: xyz
+    ignore_errors: yes 
+  - name: debug the register variable
+    debug:
+      msg: "{{xyz}}"

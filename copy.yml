@@ -1,0 +1,9 @@
+- hosts: all
+  become: yes
+  tasks:
+    - name: create file
+      file:
+        path: /root/nginx.yml
+        state: touch
+    - name: copy file
+      copy: src=/etc/ansible/nginixplaybook.yml dest=/root/git/nginx.yml

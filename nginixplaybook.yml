@@ -1,0 +1,90 @@
+- hosts: web
+  become: yes
+  tasks:
+  - name: Install nginx Package
+    yum:
+      name: nginx
+      state: latest
+  - name: creating a conf file in nginx config folder
+    file:
+      path: /etc/nginx/conf.d/harsha.conf
+      state: touch
+  - name: create directory harsha in www
+    file:
+      path: /var/www/harsha
+      state: directory
+  - name: create index.html file
+    file:
+      path: /var/www/harsha/index.html
+      state: touch
+      content: "Hello Harsha"
+  - name: Insert data into Harsha Index.html
+    blockinfile:
+      path: /var/www/harsha/index.html
+      block: |
+        Hello this is Harsha
+  - name: Insert or update date in harsha.conf file
+    blockinfile:
+      path: /etc/nginx/conf.d/harsha.conf
+      block: |
+        server {
+          listen  82;
+        location / {
+          root /var/www/harsha;
+        }
+        }
+    notify: restart nginx
+  - name: create directory ramesh in www
+    file:
+      path: /var/www/ramesh
+      state: directory
+  - name: create index.html file
+    file:
+      path: /var/www/ramesh/index.html
+      state: touch
+      content: "Hello ramesh Happy Diwali"
+  - name: creating ramesh conf file in nginx config folder
+    file:
+      path: /etc/nginx/conf.d/ramesh.conf
+      state: touch
+  - name: Insert or update date in ramesh.conf file
+    blockinfile:
+      path: /etc/nginx/conf.d/ramesh.conf
+      block: |
+        server {
+          listen  83;
+        location / {
+          root /var/www/ramesh;
+        }
+        }
+    notify: restart nginx
+  - name: creating loadbalance conf file in nginx config folder
+    file:
+      path: /etc/nginx/conf.d/loadbalance.conf
+      state: touch
+  - name: Insert or update date in loadbalance.conf file
+    blockinfile:
+      path: /etc/nginx/conf.d/loadbalance.conf
+      block: |
+        upstream backend {
+                server localhost:82; 
+                server localhost:83;
+         }
+              
+         server {
+          listen  8080;
+        location / {
+           proxy_pass http://backend;
+        }
+        }
+        #  - name: service restart
+        #    service:
+        #     name: nginx
+        #      state: started
+    notify: restart nginx
+  handlers:
+  - name: restart nginx
+    service:
+      name: nginx
+      state: restarted
+

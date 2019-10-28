@@ -1,0 +1,12 @@
+- hosts: web
+  become: yes
+  tasks:
+  - name: run ls command
+    command: ls
+    register: rome
+  - name: run change directory command
+    command: cd /home/ec2-user/file2
+    when: rome is succeeded
+  - name: show present working directory
+    shell: pwd
+    when: rome is failed

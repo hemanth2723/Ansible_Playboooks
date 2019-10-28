@@ -1,0 +1,12 @@
+- hosts: all
+  become: yes
+  tasks:
+    - name: downloading the file and unzip it through unarchive
+      unarchive:
+        src: http://apachemirror.wuchna.com/tomcat/tomcat-9/v9.0.27/bin/apache-tomcat-9.0.27.tar.gz
+        dest: /opt
+        remote_src: yes
+    - name:
+      stat:
+        path: /opt//apache-tomcat-9.0.27
+        register: Tomat9

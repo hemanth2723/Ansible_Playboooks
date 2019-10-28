@@ -1,0 +1,64 @@
+- hosts: web
+  become: yes
+  tasks:  
+  - name: create user
+    user: 
+      name: devil
+      state: absent
+  - name: Create group
+    group:
+      name: devilgroup
+  - name: create directory
+    file:
+      path: /home/ec2-user/file
+      state: directory
+    tags: create directories
+  - name: create file2 directory
+    file:
+      path: /home/ec2-user/file2
+      state: directory
+    tags: create directories
+  - name: creating file
+    file:
+      path: /home/ec2-user/file/file1.txt
+      state: touch
+    tags: create files
+  - name: creating file2
+    file:
+      path: /home/ec2-user/file2/file2.txt
+      state: touch
+    tags: create files
+  - name: Install httpd
+    yum:
+      name: httpd
+      state: present
+    tags: install packages
+  - name: start httpd service
+    service:
+      name: httpd
+      state: started
+    tags: start service
+  - name: Stop httpd service
+    service:
+      name: httpd
+      state: stopped
+    tags: stop service
+  - name: creating multiple directories
+    file:
+      path: "{{ item }}"
+      state: directory
+    with_items:
+      - '/home/ec2-user/vn1'
+      - '/home/ec2-user/vn2'
+      - '/home/ec2-user/vn3'
+    tags: creating multiple directories
+  - name: deleting multiple directories
+    file:
+      path: "{{ item }}"
+      state: absent
+    with_items:
+      - '/home/ec2-user/vn1'
+      - '/home/ec2-user/vn2'
+      - '/home/ec2-user/vn3'
+    tags: deleting multiple directories
+

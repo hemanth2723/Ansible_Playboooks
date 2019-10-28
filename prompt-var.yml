@@ -1,0 +1,10 @@
+- hosts: web
+  become: yes
+  vars_prompt:
+  - name: xyz
+    prompt: "Enter the name"
+    private: no
+  tasks:
+  - name: Print debug msgs
+    debug:
+      msg: "{{xyz}}"

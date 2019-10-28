@@ -1,0 +1,8 @@
+- hosts: all
+  become: yes
+  tasks:
+  - name: downloading the file
+    get_url:
+      url: http://mirrors.estointernet.in/apache/tomcat/tomcat-7/v7.0.96/bin/apache-tomcat-7.0.96.tar.gz
+      dest: /opt
+      mode: '0755'

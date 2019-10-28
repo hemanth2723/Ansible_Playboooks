@@ -1,0 +1,8 @@
+- hosts: all
+  become: yes
+  vars:
+    xyz: 123456789
+  tasks:
+  - name: print sample message
+    debug:
+      msg: "{{xyz}}"

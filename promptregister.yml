@@ -1,0 +1,18 @@
+- hosts: web
+  become: yes
+  vars_prompt:
+  - name: xyz 
+    prompt: Enter the List all files command
+    private: no
+  tasks:
+  - name: list command with attributes
+    shell: "{{xyz}}"
+    register: rome
+    ignore_errors: yes
+  - name: show present working directory
+    shell: pwd
+    when: rome is succeeded
+  - name: change directory
+    shell: cd /home/ec2-user/file2
+    when: rome is failed
+    
