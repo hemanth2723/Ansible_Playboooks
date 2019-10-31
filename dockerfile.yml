@@ -1,0 +1,43 @@
+- hosts: web
+  become: yes
+  vars:
+    packagenames:
+    - yum-utils
+    - device-mapper-persistent-data
+    - lvm2
+  tasks:
+  - name: Install Docker
+    yum:
+      name: "{{packagenames}}"
+      state: latest
+
+  - name: Add Docker repo
+    get_url:
+      url: https://download.docker.com/linux/centos/docker-ce.repo
+      dest: /etc/yum.repos.d/docker-ce.repo
+      force_basic_auth: yes
+  
+  - name: Enable Docker Edge repo
+    ini_file:
+      dest: /etc/yum.repos.d/docker-ce.repo
+      section: 'docker-ce-edge'
+      option: enabled
+      value: 0
+
+  - name: Enable Docker Test repo
+    ini_file:
+      dest: /etc/yum.repos.d/docker-ce.repo
+      section: 'docker-ce-test'
+      option: enabled
+      value: 0
+
+  - name: Install Docker
+    package:
+      name: docker
+      state: latest
+  
+  - name: Start Docker service
+    service:
+      name: docker
+      state: started
+      enabled: yes
